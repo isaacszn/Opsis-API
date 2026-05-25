@@ -1,8 +1,16 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+import google.generativeai as genai
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI()
 
+# Configure CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -11,12 +19,52 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+# Get API key from .env file and configure Gemini
+api_key = os.getenv("GEMINI_API_KEY")
+genai.configure(api_key=api_key)
+
+# Initialize the Gemini 1.5 Flash Model 
+model = genai.GenerativeModel("gemini-2.5-flash")
+
+# Health check endpoint
 @app.get("/")
 async def root():
     return {"message": "Opsis back-end running!!"}
 
-@app.get("/analyze")
-async def analyze():
-    return {
-        "message": "Working..."
-    }
+# Main endpoint that receives images and returns description
+@app.post("/analyze")
+async def analyze(file: UploadFile = File(...)):
+    """
+    Receives an image file, sends it to Gemini, gets description back
+    """
+    try:
+        # Read the image file data into memory
+        image_data = await file.read()
+
+        # Create prompt
+        prompt = "Analyze this image and provide a detailed description of what you see. Include what the object/subject is, it's color, material, purpose if identifiable, and any interesting details. Keep it concise."
+        
+        # Send image and prompt to Gemini
+        response = model.generate_content([
+            prompt,
+            {
+                "mime_type": file.content_type,
+                "data": image_data
+            }
+        ])
+
+        description = response.text
+
+        print(description)
+
+        return {
+            "success": True,
+            "description": description,
+            "filename": file.filename
+        }
+    
+    except Exception as e:
+        return JSONResponse(
+            status_code=400,
+            content={"success": False, "error": str(e)}
+        )
