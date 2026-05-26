@@ -2,7 +2,7 @@
 
 ## Description
 
-The Opsis API is a simple yet powerful backend service designed to transform visual data into meaningful textual descriptions. Built with FastAPI, it provides a robust and scalable solution for integrating advanced image analysis capabilities into your applications. Whether you're building a content management system, an accessibility tool, or simply need to automate image tagging, Opsis offers a clean and efficient way to achieve accurate visual recognition.
+Back-end API for Opsis (opsis.pxxl.click).
 
 ## Installation
 
