@@ -1,3 +1,8 @@
+"""
+    Just a small script created for dev to
+    list all available models of Google Gemini
+"""
+
 from dotenv import load_dotenv
 import google.generativeai as genai
 import os
