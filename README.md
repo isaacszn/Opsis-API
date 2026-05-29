@@ -2,7 +2,7 @@
 
 ## Description
 
-Back-end API for Opsis (opsis.pxxl.click).
+Back-end API for Opsis (https://opsis.pxxl.click).
 
 ## Installation
 
