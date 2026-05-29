@@ -42,7 +42,7 @@ async def analyze(file: UploadFile = File(...)):
         image_data = await file.read()
 
         # Create prompt
-        prompt = "Analyze this image and provide a detailed description of what you see. Include what the object/subject is, it's color, material, purpose if identifiable, and any interesting details. Keep it very concise, just for identification purposes."
+        prompt = "Describe this image to me, I don't know what it is. Be brief and make it  suit someone very curious. Maximum of one paragraph only, no much strange grammar but also make it detailed and informative. Make it suitable for a novice."
         
         # Send image and prompt to Gemini
         response = model.generate_content([
